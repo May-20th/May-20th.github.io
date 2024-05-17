@@ -60,9 +60,11 @@ jobs:
       
       - name: Commit Packages files
         run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
           git add ./debs Packages Packages.gz Packages.bz2
-          git commit -m "Update Packages files" -a
-          git push
+          git commit -m "Update Packages files" -a || echo "No changes to commit"
+          git push origin master
 
   # Deployment job
   deploy:
