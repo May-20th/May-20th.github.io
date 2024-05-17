@@ -1,49 +1,47 @@
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Update Sileo Repository
+name: Cydia/Sileo Repository Update
 
-on: 
+on:
   push:
-    branches: 
-      - master  # 请根据实际情况替换你所使用的分支名称
+    branches:
+      - master  # 确保这里是你想要的分支名
     paths:
-      - 'debs/*.deb'  # 当 .deb 文件被推送到这个路径时触发工作流
+      - 'debs/*.deb'  # 工作流将在此路径下的.deb文件更改后触发
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest  # 使用最新版本的 Ubuntu 运行作业
+    runs-on: ubuntu-latest  # 使用最新的Ubuntu虚拟环境来运行工作流处理
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2  # 检出仓库代码
-      
+        uses: actions/checkout@v2  # 检出仓库的代码
+
       - name: Set up Git
         run: |
           git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"  # 配置 Git 用户信息
+          git config --global user.name "GitHub Action"  # 设置 Git 的用户信息
 
       - name: Sync with Remote
-        run: git pull origin master  # 同步远程仓库的变更到当前分支
+        run: |
+          git fetch
+          git reset --hard origin/master  # 重置代码到远程分支的最新状态
 
       - name: Install dpkg
-        run: sudo apt-get update && sudo apt-get install -y dpkg  # 安装 dpkg 软件包管理器
-      
+        run: sudo apt-get update && sudo apt-get install -y dpkg  # 安装 dpkg 工具
+
       - name: Generate Packages file
         run: |
-          rm -f Packages Packages.bz2 Packages.gz
-          dpkg-scanpackages --multiversion debs >> Packages  # 使用 dpkg-scanpackages 来生成 Packages 文件
-          cat Packages | gzip > Packages.gz  # 对 Packages 文件进行压缩
-          cat Packages | bzip2 > Packages.bz2  # 同时创建 bzip2 压缩文件
-          
-      - name: Push Updates
+          dpkg-scanpackages -m debs /dev/null > Packages  # 生成 Packages 文件
+          gzip -kf Packages   # 创建 Packages.gz 压缩文件
+          bzip2 -kf Packages  # 创建 Packages.bz2 压缩文件
+
+      - name: Commit and Push Changes
         run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-          git add -f Packages Packages.gz Packages.bz2
-          git commit -m "Automatically update packages" -a  # 提交更改
+          git add Packages Packages.gz Packages.bz2  # 将新生成的文件添加到 git
+          git commit -m "Update Cydia/Sileo packages" || exit 0   # Commit 变更，如果没有变更则退出
+          git push origin master # 将变更推送回远程仓库
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master  # 这是一个 Action 用于推送更改到GitHub
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-
+      - name: Clear Old Artifacts
+        if: always()
+        run: |
+          rm -f Packages Packages.gz Packages.bz2  # 最终清理工作目录
