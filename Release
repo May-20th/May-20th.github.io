@@ -1,9 +1,9 @@
-Origin: xiaoyang's Repo
-Label: xiaoyang's Repo
+Origin: XiaoYang's Repo
+Label: XiaoYang's Repo
 Suite: stable
 Version: 1.0
-Codename: xiaoyang
+Codename: XiaoYang
 Architectures: iphoneos-arm64
-Components: main
-Description: xiaoyang's Sileo Repository
+Components: master
+Description: XiaoYang's Sileo Repository
 Icon: file://CydiaIcon.png
