@@ -6,6 +6,10 @@ on:
   push:
     branches: ["master"]
 
+# 监听 debs 目录下的 .deb 文件的变化
+    paths:
+      - "debs/*.deb"
+      
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -37,6 +41,28 @@ jobs:
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+
+  generate-packages:
+    runs-on: ubuntu-latest
+    needs: build  # 确保在构建 Jekyll 站点后执行
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dpkg
+        run: sudo apt-get update && sudo apt-get install -y dpkg
+
+      - name: Generate Packages file
+        run: |
+          dpkg-scanpackages --multiversion debs >> Packages
+          cat Packages | bzip2 > Packages.bz2
+          cat Packages | gzip > Packages.gz
+      
+      - name: Commit Packages files
+        run: |
+          git add ./debs Packages Packages.gz Packages.bz2
+          git commit -m "Update Packages files" -a
+          git push
 
   # Deployment job
   deploy:
