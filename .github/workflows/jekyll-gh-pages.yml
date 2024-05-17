@@ -61,19 +61,33 @@ jobs:
           cat Packages | bzip2 > Packages.bz2
           cat Packages | gzip > Packages.gz
       
-      - name: Commit and push changes
+      - name: 设置 Git
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git pull origin master --rebase  # 进行变基以获得最新的远程更改
-          git add ./debs Packages Packages.gz Packages.bz2
-          git commit -m "Update Packages files" -a || echo "No changes to commit"
-          git fetch
-          git reset --soft origin/master
-          # 强制推送
+      
+      - name: 从仓库获取最新更变
+        run: git fetch
+      
+      - name: 重设至最新提交
+        run: git reset --soft FETCH_HEAD
+
+      - name: 生成并提交 Cydia/Sileo Packages
+        run: |
+          dpkg-scanpackages --multiversion debs >> Packages
+          cat Packages | bzip2 > Packages.bz2
+          cat Packages | gzip > Packages.gz
+          git add debs Packages Packages.gz Packages.bz2
+          GIT_COMMITTER_DATE=$(git show -s --format=%ci HEAD)
+          export GIT_COMMITTER_DATE
+          git commit -m "更新 Packages 文件" --date="$GIT_COMMITTER_DATE" || echo "没有变更需要提交"
+
+      - name: 强制推送变更
+        run: |
           git push --force-with-lease origin master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
   # Deployment job
   deploy:
