@@ -56,6 +56,7 @@ jobs:
 
       - name: Generate Packages file
         run: |
+          rm -f Packages Packages.bz2 Packages.gz
           dpkg-scanpackages --multiversion debs >> Packages
           cat Packages | bzip2 > Packages.bz2
           cat Packages | gzip > Packages.gz
