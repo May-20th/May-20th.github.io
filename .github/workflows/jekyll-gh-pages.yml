@@ -47,9 +47,9 @@ jobs:
 
       - name: Generate Cydia/Sileo Packages files
         run: |
-          dpkg-scanpackages debs /dev/null > Packages
-          gzip -k Packages
-          bzip2 -k Packages
+          dpkg-scanpackages --multiversion debs >> Packages
+          cat Packages | bzip2 > Packages.bz2
+          cat Packages | gzip > Packages.gz
       
       - name: Commit and push
         run: |
