@@ -61,13 +61,15 @@ jobs:
           cat Packages | bzip2 > Packages.bz2
           cat Packages | gzip > Packages.gz
       
-      - name: Commit Packages files
+      - name: Commit and push changes
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          git checkout master
+          git pull origin master --rebase  # 进行变基以获得最新的远程更改
           git add ./debs Packages Packages.gz Packages.bz2
           git commit -m "Update Packages files" -a || echo "No changes to commit"
-          git push
+          git push origin master --force-with-lease
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
