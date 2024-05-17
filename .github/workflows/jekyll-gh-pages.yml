@@ -33,10 +33,12 @@ jobs:
           dpkg-scanpackages --multiversion debs >> Packages  # 使用 dpkg-scanpackages 来生成 Packages 文件
           cat Packages | gzip > Packages.gz  # 对 Packages 文件进行压缩
           cat Packages | bzip2 > Packages.bz2  # 同时创建 bzip2 压缩文件
-
-      - name: Commit files
+          
+      - name: Push Updates
         run: |
-          git add Packages Packages.gz Packages.bz2  # 添加修改后的文件到 Git
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add -f Packages Packages.gz Packages.bz2
           git commit -m "Automatically update packages" -a  # 提交更改
 
       - name: Push changes
