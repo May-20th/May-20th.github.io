@@ -18,3 +18,19 @@ Description: 进入微信设置页面开启文字转语音开关
 Author: Apibug.com
 Name: ApibugTextToVoice
 
+Package: com.csdnplus
+Version: 1.2
+Architecture: iphoneos-arm64
+Maintainer: M哥
+Installed-Size: 168
+Depends: mobilesubstrate
+Filename: debs/com.csdnplus_1.2_iphoneos-arm64.deb
+Size: 3042
+MD5sum: a01725dd9364fa1a0dc58f40247bba88
+SHA1: 25c220f43f7fe77667d8415a32b8ee143cdd6986
+SHA256: 8872c514fd945b139b4e6e71dd1606eccc6f580b83c75c2d78570ea54d8ab1c1
+Section: Tweaks
+Description: CSDN去广告
+Author: M哥
+Name: CSDN去广告-rootless
+
