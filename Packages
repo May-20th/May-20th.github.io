@@ -1,16 +1,20 @@
-Package: com.csdnplus
-Version: 1.2
+Package: ApibugTextToVoice
+Version: 1.0.0
 Architecture: iphoneos-arm64
-Maintainer: M哥
-Installed-Size: 168
+Essential: no
+Maintainer: Apibug.com <apibug6@gmail.com>
 Depends: mobilesubstrate
-Filename: debs/com.csdnplus_1.2_iphoneos-arm64.deb
-Size: 3042
-MD5sum: a01725dd9364fa1a0dc58f40247bba88
-SHA1: 25c220f43f7fe77667d8415a32b8ee143cdd6986
-SHA256: 8872c514fd945b139b4e6e71dd1606eccc6f580b83c75c2d78570ea54d8ab1c1
-Section: Tweaks
-Description: CSDN去广告
-Author: M哥
-Name: CSDN去广告-rootless
+Conflicts: ApibugTextToVoice
+Replaces: ApibugTextToVoice
+Provides: ApibugTextToVoice
+Filename: debs/ApibugTextToVoice_1.0.0_rootless.deb
+Size: 184024
+MD5sum: aeba65b650196fefd74fbb594855a584
+SHA1: bc07c336f1f44928347390eb17ba36be9f62cc09
+SHA256: 884542862b0003dc608b1b031f42238116677e9ef13099443f7834da220f6f67
+Section: custom
+Priority: optional
+Description: 进入微信设置页面开启文字转语音开关
+Author: Apibug.com
+Name: ApibugTextToVoice
 
