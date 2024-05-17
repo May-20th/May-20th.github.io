@@ -83,11 +83,16 @@ jobs:
         run: |
           git pull --rebase origin master
 
-      - name: 提交和推送变更
+      - name: 提交和强制推送变更
         run: |
-          git add -A
-          git diff-index --quiet HEAD || git commit -m "更新 Cydia/Sileo 打包文件"
-          git push origin master
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git checkout master
+          git fetch --no-tags origin master
+          git reset --soft FETCH_HEAD
+          git add debs Packages Packages.gz Packages.bz2
+          git commit -m "Update Packages files"
+          git push --force-with-lease origin HEAD:master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
