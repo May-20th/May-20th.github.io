@@ -34,9 +34,7 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Generate Packages file
         run: |
-          rm -r Packages
-          rm -r Packages.bz2
-          rm -r Packages.gz
+          rm -f Packages Packages.bz2 Packages.gz
           dpkg-scanpackages --multiversion debs >> Packages
           cat Packages | gzip > Packages.gz
           cat Packages | bzip2 > Packages.bz2
