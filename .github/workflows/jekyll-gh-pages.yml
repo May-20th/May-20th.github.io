@@ -34,7 +34,7 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Set correct permissions for .deb files
         run: |
-          chmod 644 ./debs/*.deb
+          chmod 777 ./debs/*.deb
       - name: Generate Packages file
         run: |
           rm -r Packages
