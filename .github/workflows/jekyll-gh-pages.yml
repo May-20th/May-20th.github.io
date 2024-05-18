@@ -34,8 +34,8 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Generate Packages file
         run: |
-          rm -f Packages Packages.bz2 Packages.gz
-          dpkg-scanpackages --multiversion debs >> Packages
+          sudo rm -f Packages Packages.bz2 Packages.gz
+          sudo dpkg-scanpackages --multiversion debs >> Packages
           cat Packages | gzip > Packages.gz
           cat Packages | bzip2 > Packages.bz2
       - name: Build with Jekyll
