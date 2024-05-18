@@ -37,9 +37,9 @@ jobs:
           rm -r Packages
           rm -r Packages.bz2
           rm -r Packages.gz
-          dpkg-scanpackages --multiversion debs >> Packages
-          cat Packages | gzip > Packages.gz
-          cat Packages | bzip2 > Packages.bz2
+          sudo dpkg-scanpackages --multiversion debs >> Packages
+          sudo cat Packages | gzip > Packages.gz
+          sudo cat Packages | bzip2 > Packages.bz2
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
@@ -47,9 +47,6 @@ jobs:
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Deployment job
   deploy:
